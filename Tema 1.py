@@ -13,7 +13,7 @@ def verificare(sir):
                         inceput.append(drumuri[drum_curent][2])
                         urmator.append(drumuri[drum_curent][2])
         if not urmator:
-            print("Cuvantul nu este acceptat.")
+            print("FALSE")
             break
         else:
             inceput = urmator
@@ -23,13 +23,13 @@ def verificare(sir):
         for drum_curent in stari_finale:
             for caracter in inceput:
                 if int(caracter) == drum_curent:
-                    print("Cuvantul este acceptat.")
+                    print("TRUE")
                     ok = 1
                     break
             if ok == 1:
                 break
         else:
-            print("Cuvantul nu este acceptat.")
+            print("FALSE")
 
 f = open("date.in")
 n = int(f.readline())
