@@ -4,32 +4,23 @@ def verificare(sir):
     lungime_cuvant = len(sir)
     while lungime_curenta < lungime_cuvant:
         urmator = []
-        for caracter in inceput:
+        for nod in inceput:
             for drum_curent in range(nr_drumuri):
-                if caracter == drumuri[drum_curent][0]:
+                if nod == drumuri[drum_curent][0]:
                     if drumuri[drum_curent][1] == sir[lungime_curenta]:
                         urmator.append(drumuri[drum_curent][2])
+                        inceput = urmator
                     elif drumuri[drum_curent][1] == '$':
-                        inceput.append(drumuri[drum_curent][2])
                         urmator.append(drumuri[drum_curent][2])
+                        inceput.append(drumuri[drum_curent][2])
         if not urmator:
             print("FALSE")
-            break
-        else:
-            inceput = urmator
+            return
         lungime_curenta += 1
+    if int(inceput[0]) in stari_finale:
+        print("TRUE")
     else:
-        ok = 0
-        for drum_curent in stari_finale:
-            for caracter in inceput:
-                if int(caracter) == drum_curent:
-                    print("TRUE")
-                    ok = 1
-                    break
-            if ok == 1:
-                break
-        else:
-            print("FALSE")
+        print("FALSE")
 
 f = open("date.in")
 n = int(f.readline())
