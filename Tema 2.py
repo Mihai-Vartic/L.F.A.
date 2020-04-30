@@ -1,17 +1,17 @@
 f = open("date2.in")
-n = int(f.readline())
+nr_noduri = int(f.readline())
 
-m = int(f.readline())
+nr_alfabet = int(f.readline())
 alfabet = f.readline()
 alfabet = alfabet[:-1].split(" ")
 
 q0 = f.readline()
 q0 = q0[:-1]
 
-k = int(f.readline())
+nr_stari_fin = int(f.readline())
 cin = f.readline().split(" ")
 stari_finale = []
-for i in range(k):
+for i in range(nr_stari_fin):
     stari_finale.append(int(cin[i]))
 
 nr_drumuri = int(f.readline())
@@ -21,29 +21,29 @@ for i in range(nr_drumuri):
     inceput = inceput[:-1].split(" ")
     drumuri.append(inceput)
 
-v = [[[] for i in range(n)] for j in range(m)]
-
+mat = [[[] for i in range(nr_noduri)] for j in range(nr_alfabet)]
 cnt = 0
-for j in alfabet:
-    for i in range(nr_drumuri):
-        if j in drumuri[i][1]:
-            v[cnt][int(drumuri[i][0])].append(int(drumuri[i][2]))
+for litera in alfabet:
+    for j in range(nr_drumuri):
+        if litera in drumuri[j][1]:
+            mat[cnt][int(drumuri[j][0])].append(int(drumuri[j][2]))
     cnt += 1
-print('matricea:', v)
+print()
+print('matricea:', mat)
 
 cnt = 0
-lam = [[] for i in range(n)]
-for i in range(n):
-    lam[cnt].append(cnt)
+pas1 = [[] for i in range(nr_noduri)]
+for i in range(nr_noduri):
+    pas1[cnt].append(cnt)
     aux = cnt
-    for j in v[m - 1][cnt]:
-        lam[cnt].append(j)
+    for j in mat[nr_alfabet - 1][cnt]:
+        pas1[cnt].append(j)
         cnt = j
-        for j in v[m - 1][cnt]:
-            lam[aux].append(j)
+        for j in mat[nr_alfabet - 1][cnt]:
+            pas1[aux].append(j)
             cnt = j
-            for j in v[m - 1][cnt]:
-                lam[aux].append(j)
+            for j in mat[nr_alfabet - 1][cnt]:
+                pas1[aux].append(j)
                 cnt = j
         cnt = aux
     cnt += 1
@@ -54,7 +54,7 @@ for i in range(n):
     cnt = aux
     cnt += 1'''
 
-for i in lam:
+for i in pas1:
     x = len(i)
     j = 0
     while j <= x:
@@ -66,36 +66,129 @@ for i in lam:
                 break
         if ok:
             j += 1
-for i in lam:
+for i in pas1:
     i = i.sort()
-print('lambda inchiderea:', lam)
+print()
+print('pasul 1:', pas1)
 
-#w = [[set() for j in range(n)] for y in range(m-1)]
-w = [[[[] for i in range(n)] for j in range(n)] for y in range(m-1)]
-for i in range(n):
-    aux = 0
-    while aux < m-1:
+pas2col2 = [[[[] for i in range(nr_noduri)] for j in range(nr_noduri)] for y in range(nr_alfabet - 1)]
+for i in range(nr_noduri):
+    litera = 0
+    while litera < nr_alfabet - 1:
         cnt = 0
-        for j in lam[i]:
-            for x in v[aux][j]:
-                w[aux][i][cnt] = x
-                #w[aux][i].add(x)
+        for nod in pas1[i]:
+            for x in mat[litera][nod]:
+                pas2col2[litera][i][cnt] = x
                 cnt += 1
-        aux += 1
-for i in range(m-1):
-    for j in range(n):
+        litera += 1
+for litera in range(nr_alfabet - 1):
+    for nod in range(nr_noduri):
         y = 0
-        while y < n:
+        while y < nr_noduri:
             ok = 1
-            for x in w[i][j][y + 1:]:
-                if x == w[i][j][y]:
-                    w[i][j].remove(x)
+            for i in pas2col2[litera][nod][y + 1:]:
+                if i == pas2col2[litera][nod][y]:
+                    pas2col2[litera][nod].remove(i)
                     ok = 0
                     break
-                if x == []:
-                    w[i][j].remove(x)
+                if i == []:
+                    pas2col2[litera][nod].remove(i)
                     ok = 0
                     break
             if ok:
                 y += 1
-print('tranzitie:', w)
+print()
+print('pasul 2, col. 2, a:', pas2col2[0])
+print('pasul 2, col. 2, b:', pas2col2[1])
+
+pas2col3 = [[[[] for i in range(18)] for j in range(nr_noduri)] for y in range(nr_alfabet - 1)]
+for litera in range(nr_alfabet - 1):
+    for nod in range(nr_noduri):
+        cnt = 0
+        for i in pas2col2[litera][nod]:
+            if i or i == 0:
+                for j in pas1[i]:
+                    pas2col3[litera][nod][cnt] = j
+                    cnt += 1
+for litera in range(nr_alfabet - 1):
+    for nod in range(nr_noduri):
+        y = 0
+        while y < nr_noduri:
+            ok = 1
+            for i in pas2col3[litera][nod][y + 1:]:
+                if i == pas2col3[litera][nod][y]:
+                    pas2col3[litera][nod].remove(i)
+                    ok = 0
+                    break
+                if i == []:
+                    pas2col3[litera][nod].remove(i)
+                    ok = 0
+                    break
+            if ok:
+                y += 1
+for litera in range(nr_alfabet - 1):
+    for i in pas2col3[litera]:
+        i = i.sort()
+print()
+print('pasul 2, col. 3, a:', pas2col3[0])
+print('pasul 2, col. 3, b:', pas2col3[1])
+
+pas4 = [[[[] for i in range(nr_noduri)] for j in range(nr_noduri)] for y in range(nr_alfabet - 1)]
+noduri_de_sters = [[] for i in range(nr_noduri)]
+nr_noduri_noi = nr_noduri
+nod_curent = 0
+litera_curenta = 0
+cnt = 0
+while nod_curent < nr_noduri_noi - 1:
+    nod = nod_curent + 1
+    ok = 1
+    while nod < nr_noduri_noi:
+        if pas2col3[litera_curenta][nod_curent] == pas2col3[litera_curenta][nod]:
+            litera = litera_curenta + 1
+            while litera < nr_alfabet - 1:
+                if pas2col3[litera][nod_curent] == pas2col3[litera][nod]:
+                    noduri_de_sters[nod_curent].append(nod + cnt)
+                    del (pas2col3[litera_curenta][nod])
+                    del (pas2col3[litera][nod])
+                    nr_noduri_noi -= 1
+                    cnt += 1
+                    ok = 0
+                litera += 1
+        nod += 1
+    if ok:
+        nod_curent += 1
+nr_noduri = len(pas2col3[0])
+for i in range(nr_noduri):
+    if noduri_de_sters[i]:
+        litera = 0
+        while litera < nr_alfabet - 1:
+            nod = 0
+            while nod < nr_noduri:
+                n = len(pas2col3[litera][nod])
+                for j in range(n):
+                    if pas2col3[litera][nod][j] in noduri_de_sters[i]:
+                        pas2col3[litera][nod][j] = i
+                nod += 1
+            litera += 1
+for litera in range(nr_alfabet - 1):
+    for nod in range(nr_noduri):
+        y = 0
+        while y < nr_noduri:
+            ok = 1
+            for i in pas2col3[litera][nod][y + 1:]:
+                if i == pas2col3[litera][nod][y]:
+                    pas2col3[litera][nod].remove(i)
+                    ok = 0
+                    break
+                if i == []:
+                    pas2col3[litera][nod].remove(i)
+                    ok = 0
+                    break
+            if ok:
+                y += 1
+for litera in range(nr_alfabet - 1):
+    for i in pas2col3[litera]:
+        i = i.sort()
+print()
+print('pasul 4, a:', pas2col3[0])
+print('pasul 4, b:', pas2col3[1])
