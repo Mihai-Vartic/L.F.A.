@@ -101,7 +101,7 @@ print()
 print('pasul 2, col. 2, a:', pas2col2[0])
 print('pasul 2, col. 2, b:', pas2col2[1])
 
-pas2col3 = [[[[] for i in range(18)] for j in range(nr_noduri)] for y in range(nr_alfabet - 1)]
+pas2col3 = [[[[] for i in range(100)] for j in range(nr_noduri)] for y in range(nr_alfabet - 1)]
 for litera in range(nr_alfabet - 1):
     for nod in range(nr_noduri):
         cnt = 0
@@ -143,16 +143,23 @@ while nod_curent < nr_noduri_noi - 1:
     nod = nod_curent + 1
     ok = 1
     while nod < nr_noduri_noi:
+        ok1 = 0
         if pas2col3[litera_curenta][nod_curent] == pas2col3[litera_curenta][nod]:
+            for i in stari_finale:
+                if i in pas2col3[litera_curenta][nod]:
+                    ok1 = 1
             litera = litera_curenta + 1
             while litera < nr_alfabet - 1:
                 if pas2col3[litera][nod_curent] == pas2col3[litera][nod]:
-                    noduri_de_sters[nod_curent].append(nod + cnt)
-                    del (pas2col3[litera_curenta][nod])
-                    del (pas2col3[litera][nod])
-                    nr_noduri_noi -= 1
-                    cnt += 1
-                    ok = 0
+                    for i in stari_finale:
+                        if (i in pas2col3[litera][nod] and ok1) or (i not in pas2col3[litera][nod] and not ok1):
+                            noduri_de_sters[nod_curent].append(nod + cnt)
+                            del (pas2col3[litera_curenta][nod])
+                            del (pas2col3[litera][nod])
+                            nr_noduri_noi -= 1
+                            cnt += 1
+                            ok = 0
+                            break
                 litera += 1
         nod += 1
     if ok:
